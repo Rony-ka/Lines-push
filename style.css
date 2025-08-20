@@ -1,0 +1,53 @@
+/* style.css */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif; /* Using Inter font */
+}
+
+body {
+    background-color: #ffffff; /* White background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#grid-container {
+    display: grid;
+    /* Columns will be 20px wide, adjusting to fill space */
+    grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
+    /* Rows will be 45px tall, adjusting to fill space */
+    grid-template-rows: repeat(auto-fill, minmax(45px, 1fr));
+
+    width: 100vw;
+    height: 100vh; /* Make sure grid container fully fills viewport */
+    box-sizing: border-box;
+    padding: 0px;
+    /* Removed margin-top to eliminate potential spacing issues */
+    overflow: hidden;
+}
+
+.line {
+    width: 100%;
+    height: 100%; /* Make sure .line div fills its grid cell */
+    transform-origin: center center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Changed transition-timing-function to ease-out for no ease at start */
+    transition: transform 0.3s ease-out;
+    border-radius: 5px; /* Rounded corners for the line container */
+
+    &::before {
+        content: '';
+        background-color: #000000; /* Black line */
+        width: 1.5px; /* Line width */
+        height: 46px; /* Matches grid-template-rows minmax value */
+        border-radius: 0px; /* Rounded corners for the line itself */
+    }
+}
