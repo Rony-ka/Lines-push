@@ -79,8 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 translateX = -direction * influence * maxMoveDistance;
             }
 
-            // Apply the transform to the line element
-            // The CSS transition property handles the smooth ease-in-out effect
+            // Apply the new position
+            line.style.webkitTransform = `translateX(${translateX}px)`;
             line.style.transform = `translateX(${translateX}px)`;
         });
     };
