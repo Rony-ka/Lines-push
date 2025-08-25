@@ -9,11 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- END Grid cell dimensions ---
 
     // --- Interaction parameters ---
-    const interactionRadius = 100; // Fixed radius in pixels around the cursor/finger to affect lines
+    const interactionRadius = 100; // Fixed radius in pixels around the cursor to affect lines
     const maxMoveDistance = 40;    // Maximum horizontal movement for a line in pixels
     // --- END Interaction parameters ---
 
-    let inputPos = { x: 0, y: 0 }; // Stores current input (mouse or touch) position
+    let mousePos = { x: 0, y: 0 }; // Stores current mouse position
     let lineElements = [];         // Stores all line DOM elements
 
     // Function to clear all existing lines and animations
@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
             gridContainer.appendChild(line);
             lineElements.push(line); // Add line to our array
         }
-        // After populating, immediately update positions based on current input.
+        // After populating, immediately update positions based on current mouse.
         updateLinePositions();
     };
 
-    // Function to update the position of each line based on input proximity
+    // Function to update the position of each line based on mouse proximity
     // It now uses the fixed interactionRadius.
     const updateLinePositions = () => {
         // Iterate over all line elements
@@ -59,9 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const lineCenterX = rect.left + rect.width / 2;
             const lineCenterY = rect.top + rect.height / 2;
 
-            // Calculate the distance between the input and the line's center
-            const dx = inputPos.x - lineCenterX;
-            const dy = inputPos.y - lineCenterY;
+            // Calculate the distance between the mouse and the line's center
+            const dx = mousePos.x - lineCenterX;
+            const dy = mousePos.y - lineCenterY;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             let translateX = 0; // Default translation is 0 (no movement)
@@ -75,32 +75,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Determine the direction of movement
                 const direction = Math.sign(dx);
 
-                // To make lines avoid the input, we reverse the direction
+                // To make lines avoid the cursor, we reverse the direction
                 translateX = -direction * influence * maxMoveDistance;
             }
 
-            // Apply the new position
-            line.style.webkitTransform = `translateX(${translateX}px)`;
+            // Apply the transform to the line element
+            // The CSS transition property handles the smooth ease-in-out effect
             line.style.transform = `translateX(${translateX}px)`;
         });
     };
 
-    // Event listener for touch movement
-    window.addEventListener('touchmove', (e) => {
-        // Prevent default touch behavior (e.g., scrolling)
-        e.preventDefault();
-        // Get the coordinates of the first touch point
-        const touch = e.touches[0];
-        inputPos.x = touch.clientX;
-        inputPos.y = touch.clientY;
-        updateLinePositions();
-    }, { passive: false }); // Use passive: false to allow preventDefault
-
-    // Event listener for mouse movement (retained for desktop)
+    // Event listener for mouse movement
     window.addEventListener('mousemove', (e) => {
-        inputPos.x = e.clientX;
-        inputPos.y = e.clientY;
-        updateLinePositions();
+        mousePos.x = e.clientX; // Get current mouse X coordinate
+        mousePos.y = e.clientY; // Get current mouse Y coordinate
+        updateLinePositions();  // Update line positions on every mouse move
     });
 
     // Initial population of the grid when the DOM is loaded
